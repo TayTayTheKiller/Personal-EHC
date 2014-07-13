@@ -1,7 +1,9 @@
 Personal-EHC
-============
+====================
 
 My own test version of the EHC
+
+Note this is being tested without any battleye filters. I will update what needs to be added to them at some point.
 
 Installation
 
