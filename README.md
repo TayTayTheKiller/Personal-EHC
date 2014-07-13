@@ -34,7 +34,7 @@ call compile preprocessFileLineNumbers "hc\compilesHC.sqf";
 
 5 Find the line `if (!isDedicated) then {` and replace with `if (!isDedicated && hasInterface) then {`
 
-6 open you mission.sqm fine the class Groups and add an extra item to it using this code
+6 open you mission.sqm find the class Groups and add an extra item to it using this code
 
 		class Item2 //don't forget to change the total number of items in class Groups
 		{
