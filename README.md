@@ -7,11 +7,11 @@ Installation
 
 You will need to know how to set up an ArmA2OA headless client. If you don't know how then this isn't for you in it's current state.
 
-1. First copy the folder HC to your mission file.
+1 First copy the folder HC to your mission file.
 
-2. Open your init.sqf and find the line `call compile preprocessFileLineNumbers "\z\addons\dayz_code\init\variables.sqf";`
+2 Open your init.sqf and find the line `call compile preprocessFileLineNumbers "\z\addons\dayz_code\init\variables.sqf";`
 
-3. Just above that add this sectiond of code
+3 Just above that add this sectiond of code
 ```
 hc_debug = true; //RPT logging and hint messages
 if (!isServer && !hasInterface) then { // headless client settings
@@ -22,7 +22,7 @@ if (!isServer && !hasInterface) then { // headless client settings
 }; // normal player clients will get a different set of variables with same name
 ```
 
-4. Find the line `call compile preprocessFileLineNumbers "\z\addons\dayz_code\init\compiles.sqf";` and replace it with
+4 Find the line `call compile preprocessFileLineNumbers "\z\addons\dayz_code\init\compiles.sqf";` and replace it with
 
 ```
 if (isServer || hasInterface) then {
@@ -32,7 +32,7 @@ call compile preprocessFileLineNumbers "hc\compilesHC.sqf";
 };
 ```
 
-5. open you mission.sqm fine the class Groups and add an extra item to it using this code
+5 open you mission.sqm fine the class Groups and add an extra item to it using this code
 
 		class Item2 //don't forget to change the total number of items in class Groups
 		{
@@ -57,4 +57,4 @@ call compile preprocessFileLineNumbers "hc\compilesHC.sqf";
 			};
 		};
 		
-6. If you want a simple Debug monitor that will track and show you the total amount of zombies ingame along with your fps add `[] execVM "\HC\debugM.sqf";` to the `if (!isDedicated)` section
+6 If you want a simple Debug monitor that will track and show you the total amount of zombies ingame along with your fps add `[] execVM "\HC\debugM.sqf";` to the `if (!isDedicated)` section
