@@ -30,7 +30,7 @@ if (!isServer && !hasInterface) then { // headless client settings
 if (isServer || hasInterface) then {
 call compile preprocessFileLineNumbers "\z\addons\dayz_code\init\compiles.sqf";				//Compile regular functions
 } else {
-call compile preprocessFileLineNumbers "hc\compilesHC.sqf";
+call compile preprocessFileLineNumbers "hc\Headless_Client\compilesHC.sqf";
 };
 ```
 
