@@ -1,6 +1,6 @@
-call compile preprocessFileLineNumbers "hc\HCsignals.sqf";
-HCdo_spawnRCV = compile preprocessFileLineNumbers "hc\HCdo_spawnRCV.sqf";
-call compile preprocessFileLineNumbers "hc\handle_HCdo_spawnRCV.sqf";
+call compile preprocessFileLineNumbers "hc\Headless_Client\HCsignals.sqf";
+HCdo_spawnRCV = compile preprocessFileLineNumbers "hc\Headless_Client\HCdo_spawnRCV.sqf";
+call compile preprocessFileLineNumbers "hc\Headless_Client\handle_HCdo_spawnRCV.sqf";
 nearest_player = compile preprocessFileLineNumbers "hc\compiles\nearest_player.sqf";
 zombie_loiterHC = compile preprocessFileLineNumbers "hc\compiles\zombie_loiterHC.sqf";
 zombie_generateHC = compile preprocessFileLineNumbers "hc\compiles\zombie_generateHC.sqf";
