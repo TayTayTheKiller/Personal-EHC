@@ -67,4 +67,15 @@ diag_log ("ending customization");
 			};
 		};
 		
-8 If you want a simple Debug monitor that will track and show you the total amount of zombies ingame along with your fps add `[] execVM "\HC\debugM.sqf";` to the `if (!isDedicated && hasInterface) then {` section
+8 If you want a simple Debug monitor that will track and show you the total amount of zombies ingame along with your fps add `[] execVM "\HC\debugM.sqf";` to the `if (!isDedicated && hasInterface) then {` section.
+
+This is still a really early build and will need extensive testing especially with high player counts
+
+Bugs and issues will definitely be here.
+
+Credits
+
+Goober http://epochmod.com/forum/index.php?/user/9058-goober/ Initial source
+
+David http://epochmod.com/forum/index.php?/user/15375-david/
+
