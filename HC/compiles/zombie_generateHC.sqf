@@ -1,165 +1,96 @@
-private ["_position","_unitTypes","_radius","_method","_agent"];
-_position = _this select 0;
-_doLoiter = _this select 1; // wander around
-_unitTypes = _this select 2; // class of wanted models
-_maxControlledZombies = round(dayz_maxLocalZombies);
+private ["_position","_doLoiter","_unitTypes","_isNoone","_loot","_array","_agent","_type","_radius","_method","_nearByPlayer","_myDest","_newDest","_lootType","_rnd","_isAlive","_id"];
+_position = 	_this select 0;
+_doLoiter = 	_this select 1;
+_unitTypes = 	_this select 2;
 
-_cantSee = {
-	private ["_isok"];
 
-	_isok = true;
-	_zPos = +(_this select 0);
-	if (count _zPos < 3) exitWith {
-		diag_log format["%1::_cantSee illegal pos %2", __FILE__, _zPos];
-		false
-	};
-	_zPos = ATLtoASL _zPos;
-	_fov = _this select 1; // players half field of view
-	_safeDistance = _this select 2; // minimum distance. closer is wrong
-	_farDistance = _this select 3; // distance further we won't check
-	_zPos set [2, (_zPos select 2) + 1.7];
-	{
-		_xasl = getPosASL _x;
-		if (_xasl distance _zPos < _farDistance) then {
-			if (_xasl distance _zPos < _safeDistance) then {
-				_isok = false;
-			}
-			else {
-				_eye = eyePos _x; // ASL
-				_ed = eyeDirection _x;
-				_ed = (_ed select 0) atan2 (_ed select 1);
-				_deg = [_xasl, _zPos] call BIS_fnc_dirTo;
-				_deg = (_deg - _ed + 720) % 360;
-				if (_deg > 180) then { _deg = _deg - 360; };
-				if ((abs(_deg) < _fov) && {( // in right angle sector?
-						(!(terrainIntersectASL [_zPos, _eye]) // no terrain between?
-						&& {(!(lineIntersects [_zPos, _eye]))}) // && no object between?
-					)}) then {
-					_isok = false;
-				};
-			};
-		};
-		if (!_isok) exitWith {false};
-	} count playableUnits;
+_isNoone = 	{isPlayer _x} count (_position nearEntities [["AllVehicles","CAManBase"],30]) == 0;
+_loot = 	"";
+_array = 	[];
+_agent = 	objNull;
 
-	_isok
+//Exit if a player is nearby
+if (!_isNoone) exitWith {};
+
+if (count _unitTypes == 0) then {
+    _unitTypes = 	[]+ getArray (configFile >> "CfgBuildingLoot" >> "Default" >> "zombieClass");
 };
 
-if ((dayz_spawnZombies < _maxControlledZombies) && (dayz_CurrentNearByZombies < dayz_maxNearByZombies) && (dayz_currentGlobalZombies < dayz_maxGlobalZeds)) then {
-	if ([_position, dayz_cantseefov, 10, dayz_cantseeDist] call _cantSee) then {
-		//Check if anyone close
-		_tooClose = {isPlayer _x} count (_position nearEntities ["CAManBase",30]) > 0;
-		if (_tooClose) exitwith {
-			// diag_log ("Zombie_Generate: was too close to player.");
-		};
+_type = _unitTypes call BIS_fnc_selectRandom;
 
-		//Add zeds if unitTypes equals 0
-		if (count _unitTypes == 0) then {
-			if (DZE_MissionLootTable) then {
-				_unitTypes = []+ getArray (missionConfigFile >> "CfgBuildingLoot" >> "Default" >> "zombieClass");
-			} else {
-				_unitTypes = []+ getArray (configFile >> "CfgBuildingLoot" >> "Default" >> "zombieClass");
-			};
-		};
-
-		// lets create an agent
-		_type = _unitTypes call BIS_fnc_selectRandom;
-		_radius = 5;
-		_method = "NONE";
-		if (_doLoiter) then {
-			_radius = 40;
-			_method = "CAN_COLLIDE";
-		};
-
-		//Check if point is in water
-		if (surfaceIsWater _position) exitwith {  };
-
-		_agent = createAgent [_type, _position, [], _radius, _method];
-		_agent removeAllEventHandlers "local"; // attach our own later
-        _agent addEventHandler ["local", { diag_log "Locality Event"; if(_this select 1) then {[(position (_this select 0)),(_this select 0),true] execFSM "hc\compiles\zombie_agentHC.fsm" };}];
-        PVDZE_zed_Spawn = [_agent];
-        publicVariableServer "PVDZE_zed_Spawn";
-		sleep 0.001;
-
-		//add to global counter
-		dayz_spawnZombies = dayz_spawnZombies + 1;
-
-		//Add some loot
-		_loot = "";
-		_array = [];
-		_rnd = random 1;
-		if (_rnd < 0.2) then {
-			_lootType = configFile >> "CfgVehicles" >> _type >> "zombieLoot";
-			if (isText _lootType) then {
-				_array = [];
-				{
-					_array set [count _array, _x select 0]
-				} count getArray (configFile >> "cfgLoot" >> getText(_lootType));
-				if (count _array > 0) then {
-					_index = dayz_CLBase find getText(_lootType);
-					_weights = dayz_CLChances select _index;
-					_loot = _array select (_weights select (floor(random (count _weights))));
-					if(!isNil "_array") then {
-						_loot_count =	getNumber(configFile >> "CfgMagazines" >> _loot >> "count");
-						if(_loot_count>1) then {
-							_agent addMagazine [_loot, ceil(random _loot_count)];
-						} else {
-						_agent addMagazine _loot;
-						};
-					};
-				};
-			};
-		};
-
-		_agent setVariable["agentObject",_agent];
-
-		if (!isNull _agent) then {
-			// sometime Z can be seen flying in very high speed while tp. Its altitude is set underground to hide that.
-			/*
-			_agtPos = getPosASL _agent;
-			_agtPos set [2, -3];
-			_agent setPosASL _agtPos;
-			sleep 0.001;
-			_agtPos = +(_position);
-			_agtPos set [2, -3];
-			_agent setPosASL _agtPos;
-			sleep 0.001;
-			*/
-			_agent setDir random 360;
-			//_agent setPosATL _position;
-			sleep 0.001;
-
-			_position = getPosATL _agent;
-
-			_favStance = (
-				switch ceil(random(3^0.5)^2) do {
-					//case 3: {"DOWN"}; // prone
-					case 2: {"Middle"}; // Kneel
-					default {"UP"} // stand-up
-				}
-			);
-			_agent setUnitPos _favStance;
-
-			_agent setVariable ["stance", _favStance];
-			_agent setVariable ["BaseLocation", _position];
-			_agent setVariable ["doLoiter", true]; // true: Z will be wandering, false: stay still
-			_agent setVariable ["myDest", _position];
-			_agent setVariable ["newDest", _position];
-			[_agent, _position] call zombie_loiterHC;
-		};
-		//add to monitor
-		//dayz_zedMonitor set [count dayz_zedMonitor, _agent];
-
-		//Disable simulation
-		PVDZE_Server_Simulation = [_agent, false];
-		publicVariableServer "PVDZE_Server_Simulation";
-
-		//Start behavior
-		_id = [_position,_agent] execFSM "hc\compiles\zombie_agentHC.fsm";
-		if (HC_Debug) then {
-		hint "execFSM zombie_agentHC.fsm";
-		_det = str _id;
-		diag_log format["execFSM zombie_agentHC.fsm %1",_det];
-		};
-	};
+//Create the Group and populate it
+//diag_log ("Spawned: " + _type);
+_radius = 0;
+_method = "CAN_COLLIDE";
+if (_doLoiter) then {
+    _radius = 40;
+    _method = "NONE";
 };
+//diag_log ("Spawned: " + str([_type, _position, [], _radius, _method]));
+_agent = createAgent [_type, _position, [], _radius, _method];
+_agent removeAllEventHandlers "local"; // attach our own later
+_agent addEventHandler ["local", { diag_log "Locality Event"; if(_this select 1) then {[(position (_this select 0)),(_this select 0),true] execFSM "hc\compiles\zombie_agentHC.fsm" };}];
+PVDZE_zed_Spawn = [_agent];
+publicVariableServer "PVDZE_zed_Spawn";
+
+if (_doLoiter) then {
+    _agent setDir round(random 180);
+    _agent setPosATL _position;
+    _agent setvelocity [0, 0, 1];
+    //_agent setVariable ["doLoiter",true,true];
+} else {
+    _agent setVariable ["doLoiter",false,true];
+};
+
+//diag_log ("CREATE INFECTED: " + str(_this));
+
+_position = getPosATL _agent;
+_nearByPlayer = ({isPlayer _x} count (_position nearEntities [["AllVehicles","CAManBase"],30]) > 0);
+
+if (random 1 > 0.7) then {
+    _agent setUnitPos "Middle";
+};
+
+//diag_log ("CREATED: "  + str(_agent));
+if (_nearByPlayer) then {
+    deleteVehicle _agent;
+};
+
+_isAlive = alive _agent;
+
+_myDest = getPosATL _agent;
+_newDest = getPosATL _agent;
+_agent setVariable ["myDest",_myDest];
+_agent setVariable ["newDest",_newDest];
+
+//Add some loot
+_loot = "";
+_array = [];
+_rnd = random 1;
+if (_rnd < 0.2) then {
+    _lootType = configFile >> "CfgVehicles" >> _type >> "zombieLoot";
+    if (isText _lootType) then {
+        _array = [];
+        {
+            _array set [count _array, _x select 0]
+        } count getArray (configFile >> "cfgLoot" >> getText(_lootType));
+        if (count _array > 0) then {
+            _index = dayz_CLBase find getText(_lootType);
+            _weights = dayz_CLChances select _index;
+            _loot = _array select (_weights select (floor(random (count _weights))));
+            if(!isNil "_array") then {
+                _loot_count =	getNumber(configFile >> "CfgMagazines" >> _loot >> "count");
+                if(_loot_count>1) then {
+                    _agent addMagazine [_loot, ceil(random _loot_count)];
+                } else {
+                    _agent addMagazine _loot;
+                };
+            };
+        };
+    };
+};
+
+//Start behavior
+hint "execFSM zombie_agentHC.fsm";
+_id = [_position,_agent] execFSM "hc\compiles\zombie_agentHC.fsm";
+diag_log "execFSM zombie_agentHC.fsm:" +str _id;
