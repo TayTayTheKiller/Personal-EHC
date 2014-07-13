@@ -32,9 +32,17 @@ call compile preprocessFileLineNumbers "hc\compilesHC.sqf";
 };
 ```
 
-5 Find the line `if (!isDedicated) then {` and replace with `if (!isDedicated && hasInterface) then {`
+5 Just above the line `progressLoadingScreen 1.0;` add this peace of code
 
-6 open you mission.sqm find the class Groups and add an extra item to it using this code
+```
+diag_log ("starting customization");
+call compile preprocessFileLineNumbers "hc\initHC.sqf"; // fixes and HC stuff
+diag_log ("ending customization");
+```
+
+6 Find the line `if (!isDedicated) then {` and replace with `if (!isDedicated && hasInterface) then {`
+
+7 open you mission.sqm find the class Groups and add an extra item to it using this code
 
 		class Item2 //don't forget to change the total number of items in class Groups
 		{
@@ -59,4 +67,4 @@ call compile preprocessFileLineNumbers "hc\compilesHC.sqf";
 			};
 		};
 		
-7 If you want a simple Debug monitor that will track and show you the total amount of zombies ingame along with your fps add `[] execVM "\HC\debugM.sqf";` to the `if (!isDedicated && hasInterface) then {` section
+8 If you want a simple Debug monitor that will track and show you the total amount of zombies ingame along with your fps add `[] execVM "\HC\debugM.sqf";` to the `if (!isDedicated && hasInterface) then {` section
