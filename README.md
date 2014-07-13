@@ -11,7 +11,7 @@ You will need to know how to set up an ArmA2OA headless client. If you don't kno
 
 2 Open your init.sqf and find the line `call compile preprocessFileLineNumbers "\z\addons\dayz_code\init\variables.sqf";`
 
-3 Just above that add this sectiond of code
+3 Just above that add this section of code
 ```
 hc_debug = true; //RPT logging and hint messages
 if (!isServer && !hasInterface) then { // headless client settings
