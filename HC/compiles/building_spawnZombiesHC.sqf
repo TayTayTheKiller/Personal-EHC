@@ -1,9 +1,9 @@
 private ["_obj","_type","_config","_canLoot","_unitTypes","_min","_max","_num","_zombieChance","_rnd","_position","_positions","_iPos","_nearBy","_noOneNear"];
 //_t1 = diag_tickTime;
 
-//if (dayz_maxCurrentZeds > dayz_maxZeds) exitwith {};
-//if (dayz_CurrentZombies > dayz_maxGlobalZombies) exitwith {}; 
-//if (dayz_spawnZombies > dayz_maxLocalZombies) exitwith {}; 
+if (dayz_maxCurrentZeds > dayz_maxZeds) exitwith {};
+if (dayz_CurrentZombies > dayz_maxGlobalZombies) exitwith {}; 
+if (dayz_spawnZombies > dayz_maxLocalZombies) exitwith {}; 
 
 _obj = _this select 0;
 _type = 		typeOf _obj;
