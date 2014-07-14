@@ -4,19 +4,16 @@ if (getPlayerUID player in _uid ) then { //Debug
 
     if(isNil "markers") then { markers = []};
 
-    ZombieVisibleDistance=15000;
-    ZombieMarkerType="vehicle";
-    ZombieMarkerColor="ColorRed";
-    ZombieName="Z";
+    while {true} do {
 
-
-      while {true} do {
         _pos = getPos player;
-        _zombies = _pos nearEntities ["zZombie_Base",ZombieVisibleDistance];
+        _zombies = _pos nearEntities ["zZombie_Base",15000];
         _zmcount= count _zombies;
-        ZM=0;
+	
+        ZM = 0;
 
         _markcount = count markers;
+	
         for "ZM" from 0 to (_markcount -1) do
         {
             deleteMarkerLocal ("zmMarker"+ (str ZM));
@@ -33,10 +30,10 @@ if (getPlayerUID player in _uid ) then { //Debug
                 MarkerZm = "zmMarker" + (str ZM);
                 ParamsZm=[MarkerZm,posTT];
                 MarkerZm = createMarkerLocal ParamsZm;
-                MarkerZm setMarkerTypeLocal ZombieMarkerType;
-                MarkerZm setMarkerPosLocal (posTT);
-                MarkerZm setMarkerColorLocal(ZombieMarkerColor);
-                MarkerZm setMarkerTextLocal ZombieName;
+                MarkerZm setMarkerTypeLocal "vehicle";
+                MarkerZm setMarkerPosLocal posTT;
+                MarkerZm setMarkerColorLocal "ColorRed";
+                MarkerZm setMarkerTextLocal "Z";
             };
         };
         sleep 3;
