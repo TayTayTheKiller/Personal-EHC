@@ -69,7 +69,9 @@ diag_log ("ending customization");
 			};
 		};
 		
-8 If you want a simple Debug monitor that will track and show you the total amount of zombies ingame along with your fps add `[] execVM "\HC\debugM.sqf";` to the `if (!isDedicated && hasInterface) then {` section.
+8 If you want a simple Debug monitor that will track and show you the total amount of zombies ingame along with your fps add `[] execVM "HC\Debug\debugM.sqf";` to the `if (!isDedicated && hasInterface) then {` section.
+
+9 To add zombie markers to the map/gps add `[] execVM "HC\Debug\zMarkers.sqf";` to the `if (!isDedicated && hasInterface) then {` section. Please note this may cause issues with antihacks such as infiSTARS.
 
 This is still a really early build and will need extensive testing especially with high player counts
 
