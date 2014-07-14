@@ -20,6 +20,7 @@ if (!isServer && !hasInterface) then { // headless client settings
 	dayz_maxLocalZombies = 80; // Default = 40
 	dayz_maxGlobalZombiesInit = 80;
 	dayz_maxGloabZombiesIncrease = 20;
+	dayz_maxglobalzombies = 1000; //Needed for now maybe??
 	dayz_maxZeds = 1000;
 }; // normal player clients will get a different set of variables with same name
 ```
