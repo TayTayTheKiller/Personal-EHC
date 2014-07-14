@@ -45,7 +45,14 @@ diag_log ("ending customization");
 
 6 Find the line `if (!isDedicated) then {` and replace with `if (!isDedicated && hasInterface) then {`
 
-7 open you mission.sqm find the class Groups and add an extra item to it using this code
+7 Add this to the bottom of your init.sqf. After add `5 "I_AM_A_BAD_HC_IN_WRONG_SLOT"` to your battleye scripts.txt
+```
+if (!isDedicated && !hasInterface) then {
+execVM "HC\Headless_Client\Bad_Slot_HC1.sqf";
+};
+```
+
+8 open you mission.sqm find the class Groups and add an extra item to it using this code
 
 		class Item2 //don't forget to change the total number of items in class Groups
 		{
@@ -70,11 +77,11 @@ diag_log ("ending customization");
 			};
 		};
 		
-8 If you want a simple Debug monitor that will track and show you the total amount of zombies ingame along with your fps add `[] execVM "HC\Debug\debugM.sqf";` to the `if (!isDedicated && hasInterface) then {` section.
+9 If you want a simple Debug monitor that will track and show you the total amount of zombies ingame along with your fps add `[] execVM "HC\Debug\debugM.sqf";` to the `if (!isDedicated && hasInterface) then {` section.
 
-9 To add zombie markers to the map/gps add `[] execVM "HC\Debug\zMarkers.sqf";` to the `if (!isDedicated && hasInterface) then {` section. Please note this may cause issues with antihacks such as infiSTARS.
+10 To add zombie markers to the map/gps add `[] execVM "HC\Debug\zMarkers.sqf";` to the `if (!isDedicated && hasInterface) then {` section. Please note this may cause issues with antihacks such as infiSTARS.
 
-10 if you want to use the debug markers and monitor open up the 2 scripts and add your player UId's to the _uid array.
+11 if you want to use the debug markers and monitor open up the 2 scripts and add your player UId's to the _uid array.
 
 This is still a really early build and will need extensive testing especially with high player counts
 
