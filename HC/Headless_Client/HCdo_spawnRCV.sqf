@@ -11,9 +11,10 @@ _age = _this select 5;
 _radius = _this select 6; 
 _position = _this select 7;
 _nearbyplayers = 0;
+if (HC_Debug) then {
 hint ("handling valid HCdo_spawnRCV" + str _this);
 diag_log ("--HCdospawnRCV:" + str _this);
-
+};
 _dayz_CurrentZombies = 0;
 _dayz_maxGlobalZombies = 0;
 
@@ -67,8 +68,10 @@ if (_nearbyCount < 1) then
 					//Register
 					_x setVariable ["looted",_dateNow,true];
 					//cleanup
+					if (HC_Debug) then {
 					hint "building_spawnloot";
 					diag_log "spawned building_spawnLoot";
+					};
 					_handle = _x spawn building_spawnLoot;
 					waitUntil{scriptDone _handle};
 				};
@@ -88,8 +91,10 @@ if (_nearbyCount < 1) then
 								_age = (_dateNow - _zombied) * 525948;
 								if (_age > 3) then {
 									_x setVariable ["zombieSpawn",_dateNow,true];
+									if (HC_Debug) then {
 									hint "building_spawnZombiesHC";
 									diag_log "called building_spawnZombiesHC";
+									};
 									[_x] call building_spawnZombiesHC;
 								}; 
 						} else {

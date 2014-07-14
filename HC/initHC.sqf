@@ -8,3 +8,5 @@ building_spawnZombiesHC = compile preprocessFileLineNumbers "HC\Compiles\buildin
 wild_spawnZombiesHC = compile preprocessFileLineNumbers "HC\Compiles\wild_spawnZombiesHC.sqf";
 player_spawnCheck = compile preprocessFileLineNumbers "HC\Compiles\player_spawnCheck.sqf";
 player_zombieAttack = compile preprocessFileLineNumbers "HC\Compiles\player_zombieAttack.sqf";
+//test
+zombie_findTargetAgent = 	compile preprocessFileLineNumbers "HC\Test\zombie_findTargetAgent.sqf";

@@ -1,4 +1,5 @@
-if (!isDedicated && hasInterface) then { //Debug
+_uid = ["0"];
+if (getPlayerUID player in _uid) then { //Debug
     while {true} do
     {
         hintSilent parseText format ["

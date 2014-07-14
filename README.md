@@ -74,6 +74,8 @@ diag_log ("ending customization");
 
 9 To add zombie markers to the map/gps add `[] execVM "HC\Debug\zMarkers.sqf";` to the `if (!isDedicated && hasInterface) then {` section. Please note this may cause issues with antihacks such as infiSTARS.
 
+10 if you want to use the debug markers and monitor open up the 2 scripts and add your player UId's to the _uid array.
+
 This is still a really early build and will need extensive testing especially with high player counts
 
 Bugs and issues will definitely be here.

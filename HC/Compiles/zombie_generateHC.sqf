@@ -91,6 +91,8 @@ if (_rnd < 0.2) then {
 };
 
 //Start behavior
-hint "execFSM zombie_agentHC.fsm";
 _id = [_position,_agent] execFSM "hc\compiles\zombie_agentHC.fsm";
+if (HC_Debug) then {
+hint "execFSM zombie_agentHC.fsm";
 diag_log "execFSM zombie_agentHC.fsm:" +str _id;
+};

@@ -35,4 +35,3 @@ if(isNull group _unit) then {
 };	
 _unit forceSpeed 2;
 _unit setVariable ["myDest",_pos];
-
